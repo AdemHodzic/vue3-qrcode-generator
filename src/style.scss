@@ -1,16 +1,30 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+:root {
+
+  --background: #f5f6fa;
+  --text: #9c9c9c;
+  --input-bg-color: #fff;
+  --input-text-color: #a3a3a3;
+  --button-bg-color: #5463c9;
+  --button-text-color: #fff;
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+
+  background: var(--background);
+	color: var(--text);
+	font: 1rem "PT Sans", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .5;  
 }
 
 a {
