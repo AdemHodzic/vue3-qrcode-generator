@@ -53,8 +53,8 @@ input {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   gap: 3rem;
+  height: 100%;
 }
 
 .disabled {
