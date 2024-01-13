@@ -1,7 +1,7 @@
 <template>
-  <div id="drop_zone"   @drop.prevent="dropHandler" @dragover="onDragOver" @dragenter.prevent @dragover.prevent>
-    <h1>...or drag CSV file to create multiple QR codes</h1>
-  </div>
+    <div id="drop_zone" @drop.prevent="dropHandler" @dragover="onDragOver" @dragenter.prevent @dragover.prevent>
+        <h1>...or drag CSV file to create multiple QR codes and download them as zip file</h1>
+    </div>
 </template>
 
 <script setup>
@@ -20,49 +20,44 @@ watch(links, async (newLinks) => {
 
     const newQRCodes = await Promise.all(newLinks.map(async (link) => {
         const qr = await makeQr(link)
-        return {link, qr: qr.replace(/data:.*?;base64,/, "")}
+        return { link, qr: qr.replace(/data:.*?;base64,/, "") }
     }))
 
 
 
-    newQRCodes.forEach(({link, qr}) => {
-        return zip.file(`${link}.png`, qr, {base64: true})
+    newQRCodes.forEach(({ link, qr }) => {
+        return zip.file(`${link}.png`, qr, { base64: true })
     })
 
-    zip.generateAsync({type: "base64"}).then(data => window.location.href = "data:application/zip;base64," + data)
+    zip.generateAsync({ type: "base64" }).then(data => window.location.href = "data:application/zip;base64," + data)
 })
 
 
 const dropHandler = (ev) => {
 
     if (ev.dataTransfer.items) {
-    // Use DataTransferItemList interface to access the file(s)
-    [...ev.dataTransfer.items].forEach((item, i) => {
-      // If dropped items aren't files, reject them
-      if (item.kind === "file") {
-        const file = item.getAsFile();
-        console.log(`… file[${i}].rtpe = ${file.type}`);
-        if (file.type === "text/csv") {
-            Papa.parse(file, {
-                complete: function(results) {
-                    console.log(results);
-                    links.value = results.data
+        [...ev.dataTransfer.items].forEach((item, i) => {
+            if (item.kind === "file") {
+                const file = item.getAsFile();
+                if (file.type === "text/csv") {
+                    Papa.parse(file, {
+                        complete: function (results) {
+                            links.value = results.data
+                        }
+                    });
                 }
-            });
-        }
-      }
-    });
-  }
+            }
+        });
+    }
 }
 
 const onDragOver = () => {
     console.log('dragging over')
-} 
+}
 
 </script>
 
 <style scoped>
-
 div {
     display: flex;
     justify-content: center;
@@ -81,6 +76,5 @@ h1 {
     opacity: 0.8;
     color: var(--input-text-color);
 }
-
 </style>
 
